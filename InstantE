@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>ZeroFarmX - AI Task & Earning</title>
+<meta charset="UTF-8">
+<style>
+body { font-family: Arial; max-width:700px; margin:auto; padding:20px; background:#f5f5f5; }
+textarea,input { width:100%; padding:10px; margin:10px 0; border-radius:5px; border:1px solid #ddd; }
+button { width:100%; padding:12px; background:black; color:white; font-size:18px; border:none; border-radius:5px; cursor:pointer; }
+#out { border:1px solid #ddd; padding:10px; margin-top:20px; border-radius:5px; background:#fff; min-height:100px; }
+</style>
+</head>
+<body>
+
+<h1>ZeroFarmX - AI Content + Task Tracker</h1>
+<p>Generate replies, blog content, captions instantly for earning.</p>
+
+<textarea id="prompt" placeholder="Enter your prompt here..."></textarea>
+<button onclick="run()">Generate</button>
+<div id="out"></div>
+
+<script>
+async function run() {
+  let userText=document.getElementById('prompt').value;
+  if(!userText) return alert("Write something!");
+
+  let r=await fetch("https://api.groq.com/openai/v1/chat/completions",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "Authorization":"Bearer YOUR_FREE_GROQ_KEY"
+    },
+    body:JSON.stringify({model:"llama3-8b-8192", messages:[{role:"user", content:userText}]})
+  });
+
+  let j=await r.json();
+  document.getElementById('out').innerHTML=j.choices[0].message.content;
+}
+</script>
+
+</body>
+</html>
